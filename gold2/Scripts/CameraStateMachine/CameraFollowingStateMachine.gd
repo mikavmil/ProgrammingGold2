@@ -8,7 +8,7 @@ func _ready() -> void:
 func process_camera():
 	if not globals.falling_shape_height: return
 	
-	if camera.global_position.y >= 300:
+	if camera.global_position.y <= 0:
 		camera.global_position.y = lerp(camera.global_position.y,globals.falling_shape_height, 0.05)
 
 func on_block_stuck_received() -> void:

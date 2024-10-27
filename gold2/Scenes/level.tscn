@@ -1,37 +1,82 @@
-[gd_scene load_steps=6 format=3 uid="uid://jrbml3e8tkjw"]
+[gd_scene load_steps=9 format=3 uid="uid://jrbml3e8tkjw"]
 
+[ext_resource type="Script" path="res://Scenes/level.gd" id="1_5s115"]
 [ext_resource type="PackedScene" uid="uid://b0m8od4e8o3vu" path="res://Scenes/camera_controller.tscn" id="1_08dqp"]
 [ext_resource type="Script" path="res://Scripts/spawner.gd" id="2_g6a4x"]
 
-[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_hyop1"]
+[sub_resource type="LabelSettings" id="LabelSettings_oownr"]
+font_size = 56
+font_color = Color(0.984243, 1, 0, 1)
+shadow_size = 13
+shadow_color = Color(0, 0, 0, 1)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vmttj"]
+size = Vector2(4320, 20)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_v7p0l"]
-size = Vector2(348, 74)
+size = Vector2(640, 74)
 
 [sub_resource type="QuadMesh" id="QuadMesh_2th82"]
 
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_cphd2"]
+
 [node name="Level" type="Node2D"]
+script = ExtResource("1_5s115")
 
 [node name="CameraController" parent="." instance=ExtResource("1_08dqp")]
 
-[node name="Ground" type="StaticBody2D" parent="."]
+[node name="CanvasLayer" type="CanvasLayer" parent="CameraController"]
+
+[node name="Label" type="Label" parent="CameraController/CanvasLayer"]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -160.0
+offset_top = -36.0
+offset_right = 161.0
+offset_bottom = 41.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Game over"
+label_settings = SubResource("LabelSettings_oownr")
+uppercase = true
+
+[node name="Ground" type="Area2D" parent="."]
 position = Vector2(2, 324)
+collision_layer = 2
+collision_mask = 2
 
 [node name="Collision" type="CollisionShape2D" parent="Ground"]
-position = Vector2(-11, -4)
-shape = SubResource("WorldBoundaryShape2D_hyop1")
+position = Vector2(-2, 4)
+shape = SubResource("RectangleShape2D_vmttj")
 
 [node name="Tafel" type="StaticBody2D" parent="."]
 position = Vector2(0, 287)
+collision_mask = 0
 
 [node name="Collision" type="CollisionShape2D" parent="Tafel"]
 shape = SubResource("RectangleShape2D_v7p0l")
 
 [node name="Visual" type="MeshInstance2D" parent="Tafel"]
-scale = Vector2(348, 74)
+scale = Vector2(640, 74)
 mesh = SubResource("QuadMesh_2th82")
 
-[node name="Spawner" type="Node2D" parent="." node_paths=PackedStringArray("level")]
-position = Vector2(0, -120)
+[node name="blocks" type="Node" parent="."]
+
+[node name="Spawner" type="Node2D" parent="." node_paths=PackedStringArray("blocks", "camera_controller")]
+position = Vector2(0, -256)
 script = ExtResource("2_g6a4x")
-level = NodePath("..")
+blocks = NodePath("../blocks")
+camera_controller = NodePath("../CameraController")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+position = Vector2(0, 336)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+shape = SubResource("WorldBoundaryShape2D_cphd2")
+
+[connection signal="area_entered" from="Ground" to="." method="_on_ground_area_entered"]
+[connection signal="body_entered" from="Ground" to="." method="_on_ground_body_entered"]

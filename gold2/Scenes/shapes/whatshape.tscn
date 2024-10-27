@@ -1,0 +1,56 @@
+[gd_scene load_steps=8 format=3 uid="uid://cfhksmrpha5q3"]
+
+[ext_resource type="Script" path="res://Scripts/block.gd" id="1_fpt58"]
+[ext_resource type="Script" path="res://Scripts/BlockStateMachine/StateMachine.gd" id="1_pxlsu"]
+[ext_resource type="Script" path="res://Scripts/BlockStateMachine/Controlled_State_Machine.gd" id="2_5o0sa"]
+[ext_resource type="Script" path="res://Scripts/BlockStateMachine/Idle_state.gd" id="3_qfbu0"]
+[ext_resource type="Script" path="res://Scripts/BlockStateMachine/Moving_State.gd" id="4_ut40g"]
+[ext_resource type="Script" path="res://Scripts/BlockStateMachine/Falling_State.gd" id="5_husn7"]
+[ext_resource type="Script" path="res://Scripts/BlockStateMachine/Stuck_State.gd" id="6_ye2na"]
+
+[node name="Whatshape" type="RigidBody2D" node_paths=PackedStringArray("state_machine", "shape")]
+collision_layer = 3
+script = ExtResource("1_fpt58")
+state_machine = NodePath("StateMachine")
+shape = NodePath("Polygon2D")
+
+[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("block")]
+script = ExtResource("1_pxlsu")
+block = NodePath("..")
+
+[node name="controlled" type="Node" parent="StateMachine" node_paths=PackedStringArray("idle_state", "block")]
+script = ExtResource("2_5o0sa")
+idle_state = NodePath("idle")
+block = NodePath("../..")
+
+[node name="idle" type="Node" parent="StateMachine/controlled" node_paths=PackedStringArray("main_state_machine", "moving_state_machine", "falling_state_machine", "block")]
+script = ExtResource("3_qfbu0")
+main_state_machine = NodePath("../..")
+moving_state_machine = NodePath("../moving")
+falling_state_machine = NodePath("../../falling")
+block = NodePath("../../..")
+
+[node name="moving" type="Node" parent="StateMachine/controlled" node_paths=PackedStringArray("main_state_machine", "idle_state_machine", "falling_state_machine", "block")]
+script = ExtResource("4_ut40g")
+main_state_machine = NodePath("../..")
+idle_state_machine = NodePath("../idle")
+falling_state_machine = NodePath("../../falling")
+block = NodePath("../../..")
+
+[node name="falling" type="Node" parent="StateMachine" node_paths=PackedStringArray("stuck_state", "block")]
+script = ExtResource("5_husn7")
+stuck_state = NodePath("../stuck")
+block = NodePath("../..")
+
+[node name="stuck" type="Node" parent="StateMachine" node_paths=PackedStringArray("block")]
+script = ExtResource("6_ye2na")
+block = NodePath("../..")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+position = Vector2(55, 35)
+scale = Vector2(0.572917, 0.546875)
+polygon = PackedVector2Array(-207.709, -224.914, -207.709, -137.143, -96, -64, -96, 53.0286, 15.7091, 53.0286, 15.7091, -64, -96, -137.143, 15.7091, -137.143, 15.7091, -224.914, -96, -181.029)
+
+[node name="Polygon2D" type="Polygon2D" parent="."]
+position = Vector2(48, 0)
+polygon = PackedVector2Array(-112, -88, -112, -40, -48, 0, -48, 64, 16, 64, 16, 0, -48, -40, 16, -40, 16, -88, -48, -64)

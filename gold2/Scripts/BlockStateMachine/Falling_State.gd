@@ -9,8 +9,7 @@ func enter() -> void:
 	globals.block_falling.emit()
 
 func process_physics() -> void:
-	if block.linear_velocity.length() <= 0.2:
+	if block.linear_velocity.length() <= 0.25:
 		parent_state.change_state(stuck_state)
-	
-	print(block.global_position.y)
+		
 	globals.falling_shape_height = block.global_position.y

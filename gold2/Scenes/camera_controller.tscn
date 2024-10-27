@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://b0m8od4e8o3vu"]
 
-[ext_resource type="Script" path="res://Scenes/camera_controller.gd" id="1_guiq1"]
+[ext_resource type="Script" path="res://Scripts/camera_controller.gd" id="1_guiq1"]
 [ext_resource type="Script" path="res://Scripts/CameraStateMachine/CameraStateMachine.gd" id="2_cvf1r"]
 [ext_resource type="Script" path="res://Scripts/CameraStateMachine/CameraTopStateMachine.gd" id="3_ulhov"]
 [ext_resource type="Script" path="res://Scripts/CameraStateMachine/CameraFollowingStateMachine.gd" id="4_pqhjc"]
