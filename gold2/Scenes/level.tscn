@@ -1,0 +1,37 @@
+[gd_scene load_steps=6 format=3 uid="uid://jrbml3e8tkjw"]
+
+[ext_resource type="PackedScene" uid="uid://b0m8od4e8o3vu" path="res://Scenes/camera_controller.tscn" id="1_08dqp"]
+[ext_resource type="Script" path="res://Scripts/spawner.gd" id="2_g6a4x"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_hyop1"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_v7p0l"]
+size = Vector2(348, 74)
+
+[sub_resource type="QuadMesh" id="QuadMesh_2th82"]
+
+[node name="Level" type="Node2D"]
+
+[node name="CameraController" parent="." instance=ExtResource("1_08dqp")]
+
+[node name="Ground" type="StaticBody2D" parent="."]
+position = Vector2(2, 324)
+
+[node name="Collision" type="CollisionShape2D" parent="Ground"]
+position = Vector2(-11, -4)
+shape = SubResource("WorldBoundaryShape2D_hyop1")
+
+[node name="Tafel" type="StaticBody2D" parent="."]
+position = Vector2(0, 287)
+
+[node name="Collision" type="CollisionShape2D" parent="Tafel"]
+shape = SubResource("RectangleShape2D_v7p0l")
+
+[node name="Visual" type="MeshInstance2D" parent="Tafel"]
+scale = Vector2(348, 74)
+mesh = SubResource("QuadMesh_2th82")
+
+[node name="Spawner" type="Node2D" parent="." node_paths=PackedStringArray("level")]
+position = Vector2(0, -120)
+script = ExtResource("2_g6a4x")
+level = NodePath("..")
